@@ -1,0 +1,16 @@
+services:
+  zwave-restarter:
+    container_name: zwave-restarter
+    restart: unless-stopped
+    image: python:3.12.2-bookworm
+    entrypoint: /entrypoint.sh
+    dns: 8.8.8.8
+    environment:
+      - ZWAVE_URL=${ZWAVE_URL:-http://zwave-js-ui:8091}
+      - CHECK_INTERVAL=${CHECK_INTERVAL:-30}
+      - STARTUP_DELAY=${STARTUP_DELAY:-60}
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh
+      - ./app:/app
