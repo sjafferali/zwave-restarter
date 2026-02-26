@@ -10,7 +10,7 @@ services:
       - CHECK_INTERVAL=${CHECK_INTERVAL:-30}
       - STARTUP_DELAY=${STARTUP_DELAY:-10}
     extra_hosts:
-      - host.docker.internal: host-gateway
+        host.docker.internal: host-gateway
     volumes:
       - ./entrypoint.sh:/entrypoint.sh
       - ./app:/app
