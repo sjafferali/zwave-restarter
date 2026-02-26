@@ -8,9 +8,9 @@ services:
     environment:
       - ZWAVE_URL=${ZWAVE_URL:-http://zwave-js-ui:8091}
       - CHECK_INTERVAL=${CHECK_INTERVAL:-30}
-      - STARTUP_DELAY=${STARTUP_DELAY:-60}
+      - STARTUP_DELAY=${STARTUP_DELAY:-10}
     extra_hosts:
-      - host.docker.internal:host-gateway
+      - host.docker.internal: host-gateway
     volumes:
       - ./entrypoint.sh:/entrypoint.sh
       - ./app:/app
