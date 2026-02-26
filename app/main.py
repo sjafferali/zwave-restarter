@@ -70,14 +70,26 @@ def main() -> None:
         log.info("Waiting %ds for zwave-js-ui to initialize...", STARTUP_DELAY)
         time.sleep(STARTUP_DELAY)
 
+    consecutive_failures = 0
+    last_status_connected = None
+
     while True:
         status = is_controller_connected()
 
         if status is True:
-            log.info("Controller is connected")
+            if last_status_connected is not True:
+                log.info("Controller is connected")
+            last_status_connected = True
+            consecutive_failures = 0
         elif status is False:
-            log.warning("Controller is DISCONNECTED — issuing restart")
-            restart_controller()
+            last_status_connected = False
+            consecutive_failures += 1
+            if consecutive_failures >= 2:
+                log.warning("Controller DISCONNECTED for %d consecutive checks — issuing restart", consecutive_failures)
+                restart_controller()
+                consecutive_failures = 0
+            else:
+                log.warning("Controller is DISCONNECTED (%d/2 checks before restart)", consecutive_failures)
         else:
             log.warning("Could not determine controller status, skipping")
 
